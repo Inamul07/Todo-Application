@@ -2,6 +2,9 @@ package com.inamul.todo.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Entity(name = "task_table")
 public class Task {
 
@@ -85,5 +88,10 @@ public class Task {
 
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public LocalDate parsedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(dueDate, formatter);
     }
 }

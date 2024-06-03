@@ -28,8 +28,8 @@ public class TaskController {
     }
 
     @GetMapping("/get-tasks-with-user-id/{userId}")
-    public List<Task> getTasksWithUserId(@PathVariable int userId) {
-        return taskService.getTasksWithUserId(userId);
+    public List<Task> getTasksWithUserId(@PathVariable int userId, @RequestParam String sortType, @RequestParam String filterType) {
+        return taskService.getTasksWithUserId(userId, sortType, filterType);
     }
 
     @GetMapping("/get-task/{taskId}")
@@ -67,6 +67,17 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Update Successful", HttpStatus.OK);
+    }
+
+    @PutMapping("/close-task/{taskId}")
+    public ResponseEntity<String> closeTask(@PathVariable int taskId) {
+        Task task = taskService.getTask(taskId);
+        if(task == null) {
+            return new ResponseEntity<>("Task Not Found", HttpStatus.NOT_FOUND);
+        }
+        task.setStatus("closed");
+        taskService.saveTask(task);
+        return new ResponseEntity<>("Task Closed", HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-task/{taskId}")
